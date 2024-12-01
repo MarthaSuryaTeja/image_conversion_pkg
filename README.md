@@ -5,15 +5,13 @@ This repository contains the `image_conversion_pkg`, a ROS 2 package designed to
 ## Table of Contents
 
 1. [Prerequisites](#prerequisites)  
-2. [Repository Structure](#repository-structure)  
-3. [Step-by-Step Setup](#step-by-step-setup)  
-   - [Clone the Repository](#1-clone-the-repository)  
-   - [Create the Workspace](#2-create-the-workspace)  
-   - [Set Up the Package](#3-set-up-the-package)  
-   - [Create the Source Code](#4-create-the-source-code)  
-   - [Build the Package](#5-build-the-package)  
+2. [Step-by-Step Procedure for Creating the Workspace](#step-by-step-procedure-for-creating-the-workspace)  
+   - [Create the Workspace](#create-the-workspace)  
+   - [Clone the Repository](#clone-the-repository)   
+   - [Build the Package](#build-the-package)  
+3. [Repository Structure](#repository-structure)  
 4. [Run the Node](#run-the-node)  
-5. [Troubleshooting](#troubleshooting)  
+5. [Check the Results](#check-the-results)
 
 ## Prerequisites
 
@@ -27,20 +25,72 @@ Before setting up the package, ensure you have the following:
 - `colcon` build tool installed.  
 - `image_transport` and `cv_bridge` ROS 2 dependencies.
 
+## Step-by-Step Procedure for creating the workspace
+# 1. Create the workspace 
+- Create the workspace 
+    ```bash
+    mkdir -p ~/ros2_ws/src
+# 2. Clone the Repository
+- Change the path into source directory of the workspace
+    ```bash
+    cd ~/ros2_ws/src
+- Clone the repository from github
+    ```bash
+    git clone https://github.com/MarthaSuryaTeja/image_conversion_pkg.git
+# 3. Build the Package 
+- Change the path to ros2_ws directory
+    ```bash
+    cd ..
+- Build the Package
+    ```bash
+    colcon build
 ## Repository Structure
 
 Once cloned and set up, your workspace should look like this:
 
-```plaintext
-ros2_ws/
-├── src/
-│   └── image_conversion_pkg/
-│       ├── CMakeLists.txt
-│       ├── package.xml
-│       └── src/
-│           └── image_converter_node.cpp
-        └── launch
-            └── image_conversion_launch.py
-├── build/
-├── install/
-└── log/
+      ```plaintext
+      ros2_ws/
+      ├── src/
+      │   └── image_conversion_pkg/
+      │       ├── CMakeLists.txt
+      │       ├── package.xml
+      │       └── src/
+      │           └── image_converter_node.cpp
+              └── launch
+                  └── image_conversion_launch.py
+      ├── build/
+      ├── install/
+      └── log/
+
+## Run the Node
+- Open a terminal and source the workspace
+    ```bash
+    source ~/ros2_ws/install/setup.bash
+- Launch the image_conversion node with the following command
+    ```bash
+    ros2 launch image_conversion_pkg image_conversion_launch.py
+This will start the image_Conversion node and collects the data from the camera
+
+## Check the results
+- Open another terminal and paste the below command
+    ```bash
+    ros2 run rqt_image_view rqt_image_view
+This will open a window which show the feed of /camera
+### Mode - 1 (Gray Scale Image)
+- To check the gray scale converted image. Use below command
+    ```bash
+    ros2 service call /set_mode std_srvs/srv/SetBool "{data: true}"
+- This is the service which is assigned to change the image feed into the gray scale format
+- After entering this command, open the rqt_image_view window and change the drop down to /camera/converted_image
+
+![Screenshot from 2024-12-01 20-27-06](https://github.com/user-attachments/assets/b3bb30ca-be78-4692-a8ea-594c0081cb29)
+
+
+### Mode - 2 (Coloured Image)
+- To change the converted image into Colour, then paste the below command in new terminal
+    ```bash
+    ros2 service call /set_mode std_srvs/srv/SetBool "{data: false}"
+- This is the service which is assigned to change the image feed into the gray scale format
+- After entering this command, open the rqt_image_view window and change the drop down to /camera/converted_image
+
+![Screenshot from 2024-12-01 20-27-37](https://github.com/user-attachments/assets/06e8e8e3-47de-4463-872d-aec1461cf5e6)
