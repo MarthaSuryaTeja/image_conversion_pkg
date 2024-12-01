@@ -48,7 +48,6 @@ Before setting up the package, ensure you have the following:
 
 Once cloned and set up, your workspace should look like this:
 
-      ```plaintext
       ros2_ws/
       ├── src/
       │   └── image_conversion_pkg/
